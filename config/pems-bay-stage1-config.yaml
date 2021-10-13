@@ -1,0 +1,67 @@
+device: 0
+epochs: 100
+early_stop_steps: 20
+
+trainer:
+  max_grad_norm: 3
+  reg_weight_decay: 0.001
+  reg_norm: 2
+
+data:
+  dataset: PEMS-BAY
+  batch-size: 64
+  input_dim: 2
+  output_dim: 1
+
+optimizer:
+  name: Adam
+  Adam:
+    lr: 0.001
+    weight_decay: 0.0001
+    amsgrad: true
+  RMSprop:
+    lr: 0.001
+    weight_decay: 0.0001
+
+loss:
+  name: MaskedMAELoss
+
+model:
+  predictor:
+    n_in: 2
+    n_out: 1
+    n_pred: 12
+    n_residuals: 36
+    n_dilations: 36
+    n_skips: 288
+    n_ends: 576
+    kernel_size: 2
+    n_blocks: 4
+    n_layers: 2
+    dropout: 0.3
+
+  graph_learner:
+    n_hist: 12
+    n_in: 2
+    node_dim: 6
+    dropout: 0.0
+    learn_macro: true
+    learn_micro: false
+
+
+scheduler:
+  name: null
+  ReduceLROnPlateau:
+    factor: 0.2
+    patience: 5
+    threshold: 0.005
+    min_lr: 0.00001
+  StepLR:
+    step_size: 10
+    gamma: 0.1
+  MultiStepLR:
+    milestones: [2, 10, 20, 50]
+    gamma: 0.3
+  CosineAnnealingLR:
+    T_max: 5
+    eta_min: 0.0000001

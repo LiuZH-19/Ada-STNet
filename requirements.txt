@@ -1,0 +1,8 @@
+scipy
+torch
+tqdm
+h5py
+numpy
+pandas
+PyYAML
+tensorboardX
