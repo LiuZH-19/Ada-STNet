@@ -42,7 +42,7 @@ def train(_config, resume: bool = False, test: bool = False):
     model.load_state_dict(saved['model_state_dict'], strict=False)
     
     if frozen_predictor:
-        model.adaptor.adaptive.requires_grad_(False)        
+        model.graph_learner.adaptive.requires_grad_(False)        
         for param in model.predictor.parameters():
             param.requires_grad_(False)
     
@@ -51,7 +51,7 @@ def train(_config, resume: bool = False, test: bool = False):
 
     scaler = utils.ZScoreScaler(datasets['train'].mean, datasets['train'].std)
     optimizer = optim.Adam([
-        {'params': model.adaptor.parameters()},
+        {'params': model.graph_learner.parameters()},
         {'params': model.predictor.parameters(), 'lr': 1e-5}  # fine-tune the predictor
     ], lr=learning_rate)
     loss = utils.get_loss('MaskedMAELoss')
